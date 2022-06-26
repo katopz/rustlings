@@ -41,6 +41,39 @@ enum ParsePersonError {
 impl FromStr for Person {
     type Err = ParsePersonError;
     fn from_str(s: &str) -> Result<Person, Self::Err> {
+        // empty_input
+        if s == "" {
+            return Err(ParsePersonError::Empty);
+        };
+
+        // This can use match but i will leave that fun to you ;)
+        let name_ages = s.split(",").collect::<Vec<_>>();
+
+        // trailing_comma, trailing_comma_and_some_string
+        if name_ages.len() > 2 {
+            return Err(ParsePersonError::BadLen);
+        };
+
+        // missing_comma_and_age
+        if name_ages.len() == 1 {
+            return Err(ParsePersonError::BadLen);
+        };
+
+        let name = match name_ages[0].to_string() {
+            // good_input
+            foo if foo.len() > 0 => foo,
+            // missing_name, missing_name_and_age, missing_name_and_invalid_age
+            _ => return Err(ParsePersonError::NoName),
+        };
+
+        let age = match name_ages[1].parse::<usize>() {
+            Ok(foo) => foo,
+            // missing_age
+            Err(bar) => return Err(ParsePersonError::ParseInt(bar)),
+        };
+
+        // good_input
+        Ok(Person { name, age })
     }
 }
 

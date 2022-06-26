@@ -37,6 +37,39 @@ impl Default for Person {
 
 impl From<&str> for Person {
     fn from(s: &str) -> Person {
+        // empty_input
+        if s == "" {
+            return Person::default();
+        };
+
+        // This can use match but i will leave that fun to you ;)
+        let name_ages = s.split(",").collect::<Vec<_>>();
+
+        // trailing_comma, trailing_comma_and_some_string
+        if name_ages.len() > 2 {
+            return Person::default();
+        };
+
+        // missing_comma_and_age
+        if name_ages.len() == 1 {
+            return Person::default();
+        };
+
+        let name = match name_ages[0].to_string() {
+            // good_input
+            foo if foo.len() > 0 => foo,
+            // missing_name, missing_name_and_age, missing_name_and_invalid_age
+            _ => return Person::default(),
+        };
+
+        let age = match name_ages[1].parse::<usize>() {
+            Ok(foo) => foo,
+            // missing_age
+            Err(bar) => return Person::default(),
+        };
+
+        // good_input
+        Person { name, age }
     }
 }
 

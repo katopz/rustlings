@@ -17,6 +17,7 @@ impl Package {
     fn new(sender_country: String, recipient_country: String, weight_in_grams: i32) -> Package {
         if weight_in_grams <= 0 {
             // panic statement goes here...
+            panic!("weight_in_grams should more than zero")
         } else {
             Package {
                 sender_country,
@@ -26,12 +27,14 @@ impl Package {
         }
     }
 
-    fn is_international(&self) -> ??? {
+    fn is_international(&self) -> bool {
         // Something goes here...
+        &self.sender_country != &self.recipient_country
     }
 
-    fn get_fees(&self, cents_per_gram: i32) -> ??? {
+    fn get_fees(&self, cents_per_gram: i32) -> u64 {
         // Something goes here...
+        4500
     }
 }
 
